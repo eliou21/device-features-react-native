@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import WelcomeScreen from './screens/WelcomeScreen';
 import BottomTabs from './navigation/BottomTabs';
-import { requestAllPermissions } from './utils/permissions';
 import { ThemeProvider } from './theme/ThemeContext';
 import { SavedPostsProvider } from './context/SavedPostsContext';
 import { LikedPostsProvider } from './context/LikedPostsContext';
@@ -12,9 +11,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-  useEffect(() => {
-    requestAllPermissions();
-  }, []);
 
   return (
     <ThemeProvider>

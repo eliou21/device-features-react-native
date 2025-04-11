@@ -201,30 +201,41 @@ export default function AddEntryScreen({ navigation }: AddEntryScreenProps) {
       Alert.alert('Limit Reached', `You can only add up to ${MAX_PHOTOS} photos per entry.`);
       return;
     }
-
+  
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      // Request CAMERA permission
+      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+      if (cameraPermission.status !== 'granted') {
+        Alert.alert('Permission Denied', 'Camera permission is required to take photos.');
+        return;
+      }
+  
+      // Request LOCATION permission
+      const locationPermission = await Location.requestForegroundPermissionsAsync();
+      if (locationPermission.status !== 'granted') {
         Alert.alert('Permission Denied', 'Location permission is required to save your travel location.');
         return;
       }
-
+  
+      // Get current location
       const coords = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
         timeInterval: 10000,
       });
-
+  
       const addr = await getAddressFromCoords(coords.coords.latitude, coords.coords.longitude);
-      
+  
+      // Open camera
       const result = await ImagePicker.launchCameraAsync({ quality: 1 });
       if (!result.canceled) {
         setImages(prev => [...prev, result.assets[0].uri]);
-      setAddress(addr);
+        setAddress(addr);
         setLocation({ address: addr, coords: coords.coords });
       }
+  
     } catch (error) {
-      console.error('Error getting location:', error);
-      Alert.alert('Error', 'Could not get your location. Please try again.');
+      console.error('Error getting location or camera:', error);
+      Alert.alert('Error', 'Could not complete the process. Please try again.');
     }
   };
 
