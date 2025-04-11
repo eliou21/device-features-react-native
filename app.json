@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-travel-diary",
-    "slug": "my-travel-diary",
+    "name": "device-features-react-native",
+    "slug": "device-features-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
