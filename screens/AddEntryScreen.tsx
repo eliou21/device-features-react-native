@@ -203,21 +203,18 @@ export default function AddEntryScreen({ navigation }: AddEntryScreenProps) {
     }
   
     try {
-      // Request CAMERA permission
       const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
       if (cameraPermission.status !== 'granted') {
         Alert.alert('Permission Denied', 'Camera permission is required to take photos.');
         return;
       }
   
-      // Request LOCATION permission
       const locationPermission = await Location.requestForegroundPermissionsAsync();
       if (locationPermission.status !== 'granted') {
         Alert.alert('Permission Denied', 'Location permission is required to save your travel location.');
         return;
       }
   
-      // Get current location
       const coords = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
         timeInterval: 10000,
@@ -225,7 +222,6 @@ export default function AddEntryScreen({ navigation }: AddEntryScreenProps) {
   
       const addr = await getAddressFromCoords(coords.coords.latitude, coords.coords.longitude);
   
-      // Open camera
       const result = await ImagePicker.launchCameraAsync({ quality: 1 });
       if (!result.canceled) {
         setImages(prev => [...prev, result.assets[0].uri]);
